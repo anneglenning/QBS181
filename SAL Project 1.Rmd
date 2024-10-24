@@ -46,5 +46,7 @@ county_data <- county_data %>%
         "max_aqi" = "Max.AQI",
         "90th_percentile_aqi"="X90th.Percentile.AQI",
         "median_aqi" = "Median.AQI")
+
+save(county_data, file="final_data.Rdata")
 ```
 
