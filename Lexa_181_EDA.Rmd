@@ -1,0 +1,23 @@
+---
+title: "Lexa_181_analysis"
+author: "Alexandra Treml"
+date: "2024-11-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+
+```{r}
+#load("final_data.Rdata")
+df <- county_data
+head(df)
+
+```
+
+
