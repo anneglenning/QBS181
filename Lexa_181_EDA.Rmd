@@ -10,6 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(tidyverse)
 library(ggplot2)
+library(sf)
+library(tigris)
+
+install.packages("plotly")
+library(plotly)
 ```
 
 
@@ -17,7 +22,31 @@ library(ggplot2)
 #load("final_data.Rdata")
 df <- county_data
 head(df)
-
 ```
 
+```{r}
+options(tigris_use_cache = TRUE)  # Caches shapefiles for faster loading in future
+us_counties <- counties(cb = TRUE, year = 2021, class = "sf")
+
+data <- df %>%
+  mutate(FIPS = as.character(FIPS))
+
+us_counties <- us_counties %>%
+  mutate(FIPS = as.character(GEOID))  # GEOID is the FIPS column in `us_counties`
+
+map_data <- left_join(us_counties, data, by = "FIPS")
+
+ggplot(map_data) +
+  geom_sf(aes(fill = adult_obesity_2020), color = "white", size = 0.1) +
+  scale_fill_viridis_c(option = "C", name = "Adult Obesity (%)") +
+  labs(title = "Adult Obesity Rate by County in 2020") +
+  #coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +  # Limits for continental U.S.
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+```
 
