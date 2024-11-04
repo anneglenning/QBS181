@@ -13,18 +13,33 @@ library(ggplot2)
 library(sf)
 library(tigris)
 
-install.packages("plotly")
+#install.packages("plotly")
 library(plotly)
 ```
 
 
 ```{r}
-#load("final_data.Rdata")
+load("final_data.Rdata")
 df <- county_data
 head(df)
+
+#FOR STATE AGGREGATIONS
+by_state <- df %>%
+  group_by(State) %>% 
+  summarize(across(everything(), mean, na.rm = TRUE)) %>%
+  select(-FIPS, -County)
+
+head(by_state)
+
+#WHERE is Louisiana? 
+df_la <- df %>%
+  filter(State == "California")
+df_la
 ```
 
 ```{r}
+
+#static counties
 options(tigris_use_cache = TRUE)  # Caches shapefiles for faster loading in future
 us_counties <- counties(cb = TRUE, year = 2021, class = "sf")
 
@@ -37,10 +52,14 @@ us_counties <- us_counties %>%
 map_data <- left_join(us_counties, data, by = "FIPS")
 
 ggplot(map_data) +
-  geom_sf(aes(fill = adult_obesity_2020), color = "white", size = 0.1) +
-  scale_fill_viridis_c(option = "C", name = "Adult Obesity (%)") +
-  labs(title = "Adult Obesity Rate by County in 2020") +
+  geom_sf(aes(fill = median_aqi), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("green", "yellow", "red")) +
+  labs(title = "Median AQI by County") +
+  coord_sf(xlim = c(-80, -66), ylim = c(38, 47), expand = FALSE) +  # Northeast bounds
   #coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +  # Limits for continental U.S.
+  #coord_sf(xlim = c(-105, -80), ylim = c(36, 49), expand = FALSE) + #Midwest
+  #coord_sf(xlim = c(-106, -75), ylim = c(25, 39), expand = FALSE) + #South
+  #coord_sf(xlim = c(-125, -102), ylim = c(31, 49), expand = FALSE) + #West
   theme_minimal() +
   theme(
     legend.position = "bottom",
@@ -49,4 +68,51 @@ ggplot(map_data) +
     panel.grid = element_blank()
   )
 ```
+```{r}
+#dynamic county 
+p <- ggplot(map_data) +
+  geom_sf(aes(fill = median_aqi, text = paste("County:", County, "<br>State:", State, "<br>AQI:", median_aqi, "%")), 
+          color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("green", "yellow", "red")) +
+  labs(title = "Median AQI by County in 2020") +
+  coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+# Convert to interactive plot with plotly
+ggplotly(p, tooltip = "text")
+```
+```{r}
+#by state
+us_states <- states(cb = TRUE, year = 2021, class = "sf")
+state_data <- left_join(us_states, by_state, by = c("NAME" = "State"))
+head(state_data)
+
+p <- ggplot(state_data) +
+  geom_sf(aes(fill = median_aqi, text = paste("Median AQI:", median_aqi)), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("green", "yellow", "red"), name = "Median AQI (%)")+
+  labs(title = "Median AQI by State in 2020") +
+  coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+# Convert to interactive plot with plotly
+ggplotly(p, tooltip = "text")
+
+```
+```{r}
+#By state, find the max violent crime rates, unhealthy vs very unhealthy days, smoking rate, % pop who smokes, low birth weight
+head(df)
+```
+
 
