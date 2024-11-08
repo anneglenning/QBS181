@@ -19,26 +19,43 @@ library(plotly)
 
 
 ```{r}
+#DATA LOADING AND CLEANING
 load("final_data.Rdata")
 df <- county_data
-head(df)
+df <- df %>%
+  mutate(FIPS = sprintf("%05d", as.numeric(FIPS)))
 
 #FOR STATE AGGREGATIONS
 by_state <- df %>%
   group_by(State) %>% 
   summarize(across(everything(), mean, na.rm = TRUE)) %>%
   select(-FIPS, -County)
+#head(by_state)
 
-head(by_state)
+```
+```{r}
+#install.packages("corrplot")
+library(corrplot)
+#install.packages("ggcorrplot")
+library(ggcorrplot)
 
-#WHERE is Louisiana? 
-df_la <- df %>%
-  filter(State == "California")
-df_la
+df_num <- df %>%
+  select(-FIPS, -County, -State, -access_to_exercise_2020, -acsc_admit_rate_2020, -adult_diabetic_rate_2020,-dentist_rate_2020, -driving_mortality_2020, -chlamydia_2020, -dci_score_2020, -dui_deaths_2020, -excess_drinking_2020, -fair_or_poor_health_2020, -food_env_index_2020, -food_insecure_2020, -food_insecure_2020, free_reduced_lunch_2020, -injury_death_rate_2020, -limited_healthy_food_2020, -mammogram_2020, -minor_2020, -over_65_2020, - pcp_rate_2020, -rural_2020, -severe_housing_prob_2020, -smoking_rate_2020, -social_association_rate_2020, -teen_birth_rate_2020,  -unemployment_2020, -uninsured_2020, -uninsured_v2_2020, -ypll_2020, -Year, -"90th_percentile_aqi", -co_days, -no2_days, -ozone_days, -pm2.5_days, -pm10_days, -age_adj_mortality_2020)
+
+cor_matrix <- cor(df_num, use = "complete.obs")
+print(cor_matrix)
+
+# corrplot(cor_matrix, method = "color", type = "upper",
+#          tl.col = "black", tl.srt = 24)
+
+ggcorrplot(cor_matrix, lab = TRUE, lab_size = 1,
+           colors = c("red", "white", "blue"),
+           title = "Correlation Matrix")
+#head(df_num)
 ```
 
-```{r}
 
+```{r}
 #static counties
 options(tigris_use_cache = TRUE)  # Caches shapefiles for faster loading in future
 us_counties <- counties(cb = TRUE, year = 2021, class = "sf")
@@ -50,16 +67,18 @@ us_counties <- us_counties %>%
   mutate(FIPS = as.character(GEOID))  # GEOID is the FIPS column in `us_counties`
 
 map_data <- left_join(us_counties, data, by = "FIPS")
+map_data
+
 
 ggplot(map_data) +
   geom_sf(aes(fill = median_aqi), color = "white", size = 0.1) +
   scale_fill_gradientn(colors = c("green", "yellow", "red")) +
   labs(title = "Median AQI by County") +
-  coord_sf(xlim = c(-80, -66), ylim = c(38, 47), expand = FALSE) +  # Northeast bounds
+  #coord_sf(xlim = c(-80, -66), ylim = c(38, 47), expand = FALSE) +  # Northeast bounds
   #coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +  # Limits for continental U.S.
   #coord_sf(xlim = c(-105, -80), ylim = c(36, 49), expand = FALSE) + #Midwest
   #coord_sf(xlim = c(-106, -75), ylim = c(25, 39), expand = FALSE) + #South
-  #coord_sf(xlim = c(-125, -102), ylim = c(31, 49), expand = FALSE) + #West
+  coord_sf(xlim = c(-125, -102), ylim = c(31, 49), expand = FALSE) + #West
   theme_minimal() +
   theme(
     legend.position = "bottom",
@@ -94,7 +113,7 @@ state_data <- left_join(us_states, by_state, by = c("NAME" = "State"))
 head(state_data)
 
 p <- ggplot(state_data) +
-  geom_sf(aes(fill = median_aqi, text = paste("Median AQI:", median_aqi)), color = "white", size = 0.1) +
+  geom_sf(aes(fill = median_aqi, text = paste("Median AQI:", round(median_aqi, 1))), color = "white", size = 0.1) +
   scale_fill_gradientn(colors = c("green", "yellow", "red"), name = "Median AQI (%)")+
   labs(title = "Median AQI by State in 2020") +
   coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +
@@ -110,9 +129,4 @@ p <- ggplot(state_data) +
 ggplotly(p, tooltip = "text")
 
 ```
-```{r}
-#By state, find the max violent crime rates, unhealthy vs very unhealthy days, smoking rate, % pop who smokes, low birth weight
-head(df)
-```
-
 
