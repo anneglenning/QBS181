@@ -19,3 +19,11 @@ d <- county_data %>%
   group_by(State) %>% 
   mutate(ha_corr = cor(life_expectancy_2020, median_aqi)) %>% 
   summarize(correlation = mean(ha_corr))
+
+
+# Data Patching -----------------------------------------------------------
+
+load("2020data.Rdata")
+
+
+
