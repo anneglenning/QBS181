@@ -16,9 +16,13 @@ library(plotly)
 
 ```{r}
 #DATA LOADING AND CLEANING
+<<<<<<< HEAD
 
 #load data
 load("final_data.Rdata")
+=======
+load("../Data/final_data.Rdata")
+>>>>>>> 58afed51bc3b27bbc9924aaf41bfbaae4cc61664
 df <- county_data
 df <- df %>%
   mutate(FIPS = sprintf("%05d", as.numeric(FIPS)))
@@ -101,7 +105,13 @@ data <- df %>%
 us_counties <- us_counties %>%
   mutate(FIPS = as.character(GEOID))  # GEOID is the FIPS column in `us_counties`
 
+<<<<<<< HEAD
 map_data <- left_join(us_counties, data, by = "FIPS") #join county index with original data
+=======
+map_data <- left_join(us_counties, data, by = "FIPS")
+map_data
+# save(map_data,file="../Data/map_data.rdata")
+>>>>>>> 58afed51bc3b27bbc9924aaf41bfbaae4cc61664
 
 #plot on a map, with options of which part of the US to show 
 ggplot(map_data) +
