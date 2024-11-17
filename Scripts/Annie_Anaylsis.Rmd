@@ -1,0 +1,163 @@
+---
+title: "Annie_Analysis"
+author: "Annie Glenning"
+date: "2024-11-17"
+output: pdf_document
+---
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+med_income <- median(county_data$income_2020)
+med_income
+low_income_df <- county_data %>%
+  filter(income_2020 <= med_income) %>% 
+  mutate(income_group = "Low/Middle Low")
+
+high_income_df <- county_data %>%
+  filter(income_2020 > med_income) %>% 
+  mutate(income_group = "Middle High/High")
+
+county_data <- county_data %>%
+  mutate(income_group = ifelse(income_2020 <= med_income, "Low/Middle Low", "Middle High/High"))
+```
+
+# Differences in Income Levels 
+```{r}
+summary(low_income_df$Median.AQI)
+summary(high_income_df$Median.AQI)
+```
+There are differences between the distributions in the two groups 
+```{r}
+ggplot(county_data, aes(x = income_group, y = Median.AQI, fill = income_group)) +
+  geom_boxplot() +
+  labs(title = "Median AQI Distribution by Income Group",
+       x = "Income Group",
+       y = "Median AQI") +
+  theme_minimal() +
+  scale_fill_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE"))
+```
+
+```{r}
+cor_test <- cor.test(low_income_df$Median.AQI, low_income_df$income_2020)
+print(cor_test)
+```
+Since the p-value is 0.02278, which is less than the alpha level of 0.05, then I reject the null hypothesis, which was that the true correlation is equal to 0. Thus there is statistically significant correlation between the Median AQI and income within the low income.
+
+## Adult Obesity
+```{r}
+ggplot(county_data, aes(x = Median.AQI, y = adult_obesity_2020, color = income_group)) +
+  geom_point(size = 3) +  
+  scale_color_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE")) + 
+  labs(title = "Median AQI by Income Group",
+       x = "Median AQI",
+       y = "Adult Obesity",
+       color = "Income Group") +
+  geom_smooth(method = "lm", se = FALSE, aes(group = income_group)) +  
+  theme_minimal()
+```
+
+```{r}
+mod_h <- lm(high_income_df$adult_obesity_2020 ~ high_income_df$Median.AQI)
+summary(mod_h)
+mod_l <- lm(low_income_df$adult_obesity_2020 ~ low_income_df$Median.AQI)
+summary(mod_l)
+```
+In the middle high to high income group, the p-value associated with this coefficient is 0.0096, which is less than 0.05, indicating that the relationship between Median AQI and adult obesity is statistically significant.
+In the low to middle low income group, the p-value associated with this coefficient is 0.09981, which isn't less than 0.05, indicating there isn't a statistically significant relationship between Median AQI and adult obesity.
+
+## Low Birthweight
+
+```{r}
+ggplot(county_data, aes(x = Median.AQI, y = low_birthweight_2020, color = income_group)) +
+  geom_point(size = 3) +  
+  scale_color_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE")) + 
+  labs(title = "Median AQI by Income Group",
+       x = "Median AQI",
+       y = "Low Birthweight",
+       color = "Income Group") +
+  geom_smooth(method = "lm", se = FALSE, aes(group = income_group)) +  
+  theme_minimal()
+```
+```{r}
+mod_h_birthweight <- lm(high_income_df$low_birthweight_2020 ~ high_income_df$Median.AQI)
+summary(mod_h_birthweight)
+mod_l_birthweight <- lm(low_income_df$low_birthweight_2020 ~ low_income_df$Median.AQI)
+summary(mod_l_birthweight)
+mod_birthweight <- lm(county_data$low_birthweight_2020 ~ county_data$Median.AQI)
+summary(mod_birthweight)
+```
+
+# physical inactive 
+```{r}
+ggplot(county_data, aes(x = Median.AQI, y = phys_inactive_2020)) +
+  geom_point(size = 3, color = "#4393C3") +  
+  labs(title = "Median AQI by Physical Inactive Days",
+       x = "Median AQI",
+       y = "Physical Inactive Days") +
+  geom_smooth(method = "lm", se = FALSE, color = "#2166AC") +  
+  theme_minimal()
+```
+
+```{r}
+mod_inactive <- lm(county_data$phys_inactive_2020 ~ county_data$Median.AQI)
+summary(mod_inactive)
+```
+
+# Violent Crime Rate 
+```{r}
+ggplot(county_data, aes(x = Median.AQI, y = violent_crime_rate_2020)) +
+  geom_point(size = 3, color = "#4393C3") +  
+  labs(title = "Median AQI by Violent Crime Rate",
+       x = "Median AQI",
+       y = "Violent Crime Rate 2020") +
+  geom_smooth(method = "lm", se = FALSE, color = "#2166AC") +  
+  theme_minimal()
+```
+
+```{r}
+mod_vc <- lm(county_data$violent_crime_rate_2020 ~ county_data$Median.AQI)
+summary(mod_vc)
+```
+
+# Mental Health vs Physical Health
+
+```{r}
+summary(county_data$Median.AQI)
+county_data$AQI_Quartile <- cut(
+  county_data$Median.AQI,
+  breaks = c(-100, 34, 39, 44, 115),
+  labels = c("1st Quartile", "2nd Quartile", "3rd Quartile", "4th Quartile"),
+  include.lowest = TRUE
+)
+```
+
+
+```{r}
+ggplot(county_data, aes(x = phys_unhealthy_days_2020, y = ment_unhealthy_days_2020, color = AQI_Quartile)) +
+  geom_point(size = 3, alpha = 0.7) +
+  labs(
+    title = "Mental vs Physical Health Days by County",
+    x = "Physical Health Days",
+    y = "Mental Health Days",
+    color = "AQI Quartile"
+  ) +
+  scale_color_manual(values = c("#B2182B", "#F4A582", "#D1E5F0", "#4393C3")) +  
+  geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.5) +  
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    text = element_text(size = 12)
+  )
+```
+
+```{r}
+cor_test <- cor.test(county_data$ment_unhealthy_days_2020, county_data$phys_unhealthy_days_2020)
+print(cor_test)
+
+mod_ment <- lm(county_data$ment_unhealthy_days_2020 ~ county_data$phys_unhealthy_days_2020)
+summary(mod_ment)
+```
+
