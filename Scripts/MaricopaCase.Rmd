@@ -254,6 +254,3 @@ life_exp <- df %>%
 select(State, County, life_expectancy_2020, population_2020) %>%
 arrange(desc(life_expectancy_2020))
 ```
-
-
-
