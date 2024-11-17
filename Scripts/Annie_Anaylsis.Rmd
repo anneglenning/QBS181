@@ -139,9 +139,9 @@ county_data$AQI_Quartile <- cut(
 ggplot(county_data, aes(x = phys_unhealthy_days_2020, y = ment_unhealthy_days_2020, color = AQI_Quartile)) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
-    title = "Mental vs Physical Health Days by County",
-    x = "Physical Health Days",
-    y = "Mental Health Days",
+    title = "Mental vs Physical Unhealth Days by County",
+    x = "Physical Unhealth Days",
+    y = "Mental Unhealth Days",
     color = "AQI Quartile"
   ) +
   scale_color_manual(values = c("#B2182B", "#F4A582", "#D1E5F0", "#4393C3")) +  
