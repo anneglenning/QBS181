@@ -1,2 +1,24 @@
 README for SAL Project QBS 181 24F
 
+## MaricopaCase.Rmd
+The data from this R markdown comes from the cleaned and aggregated county-level health data called ‘final_data.Rdata’ as well as from the US Census data API. 
+Purpose
+•	The purpose of this markdown notebook is to explore the county-level data to discover interesting patterns in the data to do further analysis on. 
+•	After exploring the data, the notebook covers an in-depth view of Maricopa County, AZ to determine if AQI in that region correlates to poor health outcomes 
+Conclusion
+•	Maricopa County, AZ has above average health outcomes, likely due to excellent year-round sunshine, access to medical care, higher than average median incomes, access to exercise, access to great food. This is despite having some of the worst median air quality in the US due to winter inversion and ozone. 
+Overview of tasks done in this notebook: 
+•	Read in libraries (dplyr, tidyverse, ggplot, sf, tigris, plotly, corrplot)
+•	Data Cleaning
+o	make FIPS numeric
+o	Summarize across all numeric variables by mean and group by State
+•	Exploratory scatterplots by rurality
+•	Create correlation matrix
+•	Use tigris and sf packages to load shapefile maps and create geopoints to plot county and state-level data by Median AQI on a map in R
+o	Static county-level map in US regions using ggplot2
+o	Dynamic county-level map, whole USA, using ggplot2 and plotly
+o	Dynamic, aggregated state-level map USA, using ggplot and plotly
+•	Use US Census API to grab population and job identifiers for Maricopa County, AZ. 
+o	Filter US census data by Maricopa County’s GEOID
+o	Filter the US census 
+
