@@ -8,7 +8,9 @@ output: html_document
 ```{r}
 # downloading the data - make sure it's in the same dictionary 
 aqi <- read.csv("annual_aqi_by_county_2020.csv")
-data2020 <- load("2020data.rdata") # use data for the variable name
+load("2020data.rdata") # use data for the variable name
+data2020 <- data_2020
+rm(data_2020)
 ```
 
 ```{r}
@@ -18,7 +20,7 @@ library(stringr)
 ```
 
 ```{r}
-data <- data %>% 
+data <- data2020 %>% 
   rename(County = Name) %>%  # renames the column name
   mutate(County = str_replace(County, "(?i) county", "")) # remove the word county from each entry
 ```
