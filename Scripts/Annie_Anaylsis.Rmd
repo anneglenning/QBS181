@@ -4,33 +4,36 @@ author: "Annie Glenning"
 date: "2024-11-17"
 output: pdf_document
 ---
+
 ```{r}
 library(ggplot2)
 library(dplyr)
 ```
 
 ```{r}
-med_income <- median(county_data$income_2020)
-med_income
+med_income <- median(county_data$income_2020) # median income
 low_income_df <- county_data %>%
-  filter(income_2020 <= med_income) %>% 
-  mutate(income_group = "Low/Middle Low")
+  filter(income_2020 <= med_income) %>% # creating a df for counties less than or equal to median income
+  mutate(income_group = "Low/Middle Low") 
 
 high_income_df <- county_data %>%
-  filter(income_2020 > med_income) %>% 
+  filter(income_2020 > med_income) %>% # creating a df for counties more than the median income
   mutate(income_group = "Middle High/High")
 
 county_data <- county_data %>%
-  mutate(income_group = ifelse(income_2020 <= med_income, "Low/Middle Low", "Middle High/High"))
+  mutate(income_group = ifelse(income_2020 <= med_income, "Low/Middle Low", "Middle High/High")) # new column named income_group that states if lower or higher income level 
 ```
 
-# Differences in Income Levels 
+# Income Group Comparisons 
+
 ```{r}
 summary(low_income_df$Median.AQI)
 summary(high_income_df$Median.AQI)
 ```
-There are differences between the distributions in the two groups 
+There are differences between the distributions in the two groups.
+
 ```{r}
+# Box Plot comparing the distributions of the two groups 
 ggplot(county_data, aes(x = income_group, y = Median.AQI, fill = income_group)) +
   geom_boxplot() +
   labs(title = "Median AQI Distribution by Income Group",
@@ -39,31 +42,30 @@ ggplot(county_data, aes(x = income_group, y = Median.AQI, fill = income_group)) 
   theme_minimal() +
   scale_fill_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE"))
 ```
+The distributions are slightly different. Middle High/High Income Group has a higher max, median, mean, first quartile, and minimum value than the Low/Middle Low Income Group. 
 
 ```{r}
-cor_test <- cor.test(low_income_df$Median.AQI, low_income_df$income_2020)
-print(cor_test)
+# Pearson's Correlation Test 
+print(cor.test(low_income_df$Median.AQI, low_income_df$income_2020))
 ```
 Since the p-value is 0.02278, which is less than the alpha level of 0.05, then I reject the null hypothesis, which was that the true correlation is equal to 0. Thus there is statistically significant correlation between the Median AQI and income within the low income.
 
 ## Adult Obesity
 ```{r}
+# creating scatterplot of Median AQI by Income Group 
 ggplot(county_data, aes(x = Median.AQI, y = adult_obesity_2020, color = income_group)) +
   geom_point(size = 3) +  
-  scale_color_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE")) + 
+  scale_color_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE")) + # same colors as before
   labs(title = "Median AQI by Income Group",
        x = "Median AQI",
        y = "Adult Obesity",
-       color = "Income Group") +
-  geom_smooth(method = "lm", se = FALSE, aes(group = income_group)) +  
+       color = "Income Group") + # seperating income groups 
+  geom_smooth(method = "lm", se = FALSE, aes(group = income_group)) + # linear regression lines
   theme_minimal()
 ```
 
 ```{r}
-mod_h <- lm(high_income_df$adult_obesity_2020 ~ high_income_df$Median.AQI)
-summary(mod_h)
-mod_l <- lm(low_income_df$adult_obesity_2020 ~ low_income_df$Median.AQI)
-summary(mod_l)
+summary(lm(high_income_df$adult_obesity_2020 ~ high_income_df$Median.AQI)) # linear regression for high income county AQI and obesity 
 ```
 In the middle high to high income group, the p-value associated with this coefficient is 0.0096, which is less than 0.05, indicating that the relationship between Median AQI and adult obesity is statistically significant.
 In the low to middle low income group, the p-value associated with this coefficient is 0.09981, which isn't less than 0.05, indicating there isn't a statistically significant relationship between Median AQI and adult obesity.
@@ -71,64 +73,68 @@ In the low to middle low income group, the p-value associated with this coeffici
 ## Low Birthweight
 
 ```{r}
+# creating scatterplot of Median AQI by Low Birth Weight
 ggplot(county_data, aes(x = Median.AQI, y = low_birthweight_2020, color = income_group)) +
   geom_point(size = 3) +  
-  scale_color_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE")) + 
-  labs(title = "Median AQI by Income Group",
+  scale_color_manual(values = c("Low/Middle Low" = "#F4A582", "Middle High/High" = "#92C5DE")) + # same colors 
+  labs(title = "Median AQI by Birth Weight",
        x = "Median AQI",
        y = "Low Birthweight",
-       color = "Income Group") +
-  geom_smooth(method = "lm", se = FALSE, aes(group = income_group)) +  
+       color = "Income Group") + # separate by income group 
+  geom_smooth(method = "lm", se = FALSE, aes(group = income_group)) + # linear regression lines
   theme_minimal()
 ```
 ```{r}
-mod_h_birthweight <- lm(high_income_df$low_birthweight_2020 ~ high_income_df$Median.AQI)
-summary(mod_h_birthweight)
-mod_l_birthweight <- lm(low_income_df$low_birthweight_2020 ~ low_income_df$Median.AQI)
-summary(mod_l_birthweight)
-mod_birthweight <- lm(county_data$low_birthweight_2020 ~ county_data$Median.AQI)
-summary(mod_birthweight)
+summary(lm(high_income_df$low_birthweight_2020 ~ high_income_df$Median.AQI)) # linear regression for high income county median AQI and low birth weight  
+summary(lm(low_income_df$low_birthweight_2020 ~ low_income_df$Median.AQI)) # linear regression for low income county median AQI and low birth weight  
+summary(lm(county_data$low_birthweight_2020 ~ county_data$Median.AQI)) # linear regression for median AQI and low birth weight  
 ```
+In the middle high to high income group, the p-value associated with this coefficient is 0.004806, which is less than 0.05, indicating that the relationship between Median AQI and low birth weight percentage is statistically significant.
+In the low to middle low income group, the p-value associated with this coefficient is 0.07048, which is not less than 0.05, indicating that there isn't a statistically significant relationship between Median AQI and low birth weight percentage.
+For all counties, the p-value associated with this coefficient is 0.08817, which is not less than 0.05, indicating that there isn't a statistically significant relationship between Median AQI and low birth weight percentage.
 
 # physical inactive 
+
 ```{r}
+# creating scatterplot of Physical Inactive Days by Median AQI
 ggplot(county_data, aes(x = Median.AQI, y = phys_inactive_2020)) +
   geom_point(size = 3, color = "#4393C3") +  
   labs(title = "Median AQI by Physical Inactive Days",
        x = "Median AQI",
-       y = "Physical Inactive Days") +
-  geom_smooth(method = "lm", se = FALSE, color = "#2166AC") +  
+       y = "Physical Inactive Days") + 
+  geom_smooth(method = "lm", se = FALSE, color = "#2166AC") +  # linear regression line
   theme_minimal()
 ```
 
 ```{r}
-mod_inactive <- lm(county_data$phys_inactive_2020 ~ county_data$Median.AQI)
-summary(mod_inactive)
+summary(lm(county_data$phys_inactive_2020 ~ county_data$Median.AQI)) # linear regression for median AQI and Physical inactive days
 ```
 
 # Violent Crime Rate 
+
 ```{r}
+# creating scatterplot of Median AQI by Violent Crimes 
 ggplot(county_data, aes(x = Median.AQI, y = violent_crime_rate_2020)) +
   geom_point(size = 3, color = "#4393C3") +  
   labs(title = "Median AQI by Violent Crime Rate",
        x = "Median AQI",
-       y = "Violent Crime Rate 2020") +
-  geom_smooth(method = "lm", se = FALSE, color = "#2166AC") +  
+       y = "Violent Crime Rate") +
+  geom_smooth(method = "lm", se = FALSE, color = "#2166AC") + # linear regression line 
   theme_minimal()
 ```
 
 ```{r}
-mod_vc <- lm(county_data$violent_crime_rate_2020 ~ county_data$Median.AQI)
-summary(mod_vc)
+summary(lm(county_data$violent_crime_rate_2020 ~ county_data$Median.AQI)) # linear regression of violent crime rate and median AQI
 ```
 
 # Mental Health vs Physical Health
 
 ```{r}
-summary(county_data$Median.AQI)
+summary(county_data$Median.AQI) # gives the quarile values 
+# creates a new column and puts the quartile number for the county in the column 
 county_data$AQI_Quartile <- cut(
   county_data$Median.AQI,
-  breaks = c(-100, 34, 39, 44, 115),
+  breaks = c(-100, 34, 39, 44, 115), # cut off points 
   labels = c("1st Quartile", "2nd Quartile", "3rd Quartile", "4th Quartile"),
   include.lowest = TRUE
 )
@@ -136,6 +142,7 @@ county_data$AQI_Quartile <- cut(
 
 
 ```{r}
+# creates a scatterplot of physical unhealthy days by mentally unhealthy days but groups the points into 4 different quartiles by median AQI 
 ggplot(county_data, aes(x = phys_unhealthy_days_2020, y = ment_unhealthy_days_2020, color = AQI_Quartile)) +
   geom_point(size = 3, alpha = 0.7) +
   labs(
@@ -144,20 +151,19 @@ ggplot(county_data, aes(x = phys_unhealthy_days_2020, y = ment_unhealthy_days_20
     y = "Mental Unhealth Days",
     color = "AQI Quartile"
   ) +
-  scale_color_manual(values = c("#B2182B", "#F4A582", "#D1E5F0", "#4393C3")) +  
+  scale_color_manual(values = c("#B2182B", "#F4A582", "#D1E5F0", "#4393C3")) +  # similar colors 
   geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.5) +  
   theme_minimal() +
-  theme(
+  theme( # legend 
     legend.position = "top",
     text = element_text(size = 12)
   )
 ```
 
 ```{r}
-cor_test <- cor.test(county_data$ment_unhealthy_days_2020, county_data$phys_unhealthy_days_2020)
-print(cor_test)
-
-mod_ment <- lm(county_data$ment_unhealthy_days_2020 ~ county_data$phys_unhealthy_days_2020)
-summary(mod_ment)
+# pearson correlation test for mentally unhealthy days and physically unhealthy days
+print(cor.test(county_data$ment_unhealthy_days_2020, county_data$phys_unhealthy_days_2020))
+# linear regresion test for mentally unhealthy days and physically unhealthy days
+summary(lm(county_data$ment_unhealthy_days_2020 ~ county_data$phys_unhealthy_days_2020))
 ```
-
+Physical unhealthy days and mentally unhealthy days has a positive correlation with 0.9, with a p-value of 2.2e-16, which is less than 0.05, indicating a statistically significant relationship. 
