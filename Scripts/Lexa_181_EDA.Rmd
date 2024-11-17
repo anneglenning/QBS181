@@ -18,7 +18,7 @@ library(plotly)
 
 ```{r}
 #DATA LOADING AND CLEANING
-load("final_data.Rdata")
+load("../Data/final_data.Rdata")
 df <- county_data
 df <- df %>%
   mutate(FIPS = sprintf("%05d", as.numeric(FIPS)))
@@ -106,6 +106,7 @@ us_counties <- us_counties %>%
 
 map_data <- left_join(us_counties, data, by = "FIPS")
 map_data
+# save(map_data,file="../Data/map_data.rdata")
 
 ggplot(map_data) +
   geom_sf(aes(fill = median_aqi), color = "white", size = 0.1) +

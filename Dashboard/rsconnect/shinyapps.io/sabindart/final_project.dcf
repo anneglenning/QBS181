@@ -5,6 +5,6 @@ account: sabindart
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13359225
-bundleId: 9373069
+bundleId: 9376868
 url: https://sabindart.shinyapps.io/final_project/
 version: 1
