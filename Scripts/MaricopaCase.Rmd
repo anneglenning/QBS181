@@ -14,6 +14,7 @@ library(tigris)
 library(plotly)
 ```
 
+1. This chunk loads the data, loads my custom functions from an R script, aggregates by state, and makes a few EDA scatterplots
 ```{r}
 #DATA LOADING AND CLEANING
 
@@ -64,6 +65,7 @@ spearman_obesity_rurality
 #results: p value is significant, so there is a moderately positive relationship between obesity and rurality
 ```
 
+2. This code chunk creates the correlation matrix
 ```{r}
 library(corrplot)
 library(ggcorrplot)
@@ -80,7 +82,7 @@ ggcorrplot(cor_matrix, lab = TRUE, lab_size = 1, #plot corr matrix
            title = "Correlation Matrix")
 ```
 
-
+3. This code chunk creates the static USA geopoint map by county, regionally
 ```{r}
 #plot static counties, hazardous air quality days 
 options(tigris_use_cache = TRUE)  # Caches shapefiles for faster loading
@@ -112,6 +114,8 @@ ggplot(map_data) +
     panel.grid = element_blank()
   )
 ```
+
+4. This code chunk creates the county-level DYNAMIC map for median AQI using Plotly
 ```{r}
 #dynamic county map with plotly
 p <- ggplot(map_data) +
@@ -131,6 +135,8 @@ p <- ggplot(map_data) +
 #show plot
 ggplotly(p, tooltip = "text")
 ```
+
+5. This code chunk creates the DYNAMIC state map for median aqi
 ```{r}
 #dynamic plot by state, annotated by median_aqi 
 us_states <- states(cb = TRUE, year = 2021, class = "sf")
@@ -154,6 +160,7 @@ p <- ggplot(state_data) +
 ggplotly(p, tooltip = "text")
 ```
 
+6. This code chunk usees the Census API to compare population and distribution in Maricopa, AZ
 ```{r}
 #Using Census API data to compare population and distribution in Maricopa, AZ
 library(tidycensus)
@@ -184,6 +191,8 @@ az_maricopa <- az %>%
 
 head(az_maricopa)
 ```
+
+7. This code chunk filters out Maricopa from the original data and creates custom boxplots from the custom function library
 ```{r}
 #find population n in maricopa county in our data to compare
 pop_n_maricopa <- df %>%
@@ -194,11 +203,14 @@ pop_n_maricopa
 
 #4412779-4410824	
 
+#Rendering boxplots from CUSTOM FUNCTION LIBRARY 
 custom_boxplot(df, "adult_obesity_2020", "lightblue", "Adult Obesity Rate")
 custom_boxplot(df, "limited_healthy_food_2020", "lightgreen", "% Population with Limited Healthy Food Access")
 custom_boxplot(df, "life_expectancy_2020", "lightcoral", "Life Expectancy (Years)")
 custom_boxplot(df, "access_to_exercise_2020", "purple", "% Population with Access to Exercise")
 ```
+
+8. This code chunk creates a table of life expectancy in all counties, arranged desc
 ```{r}
 #LIFE EXPECTANCY OUTLIERS
 life_exp <- df %>%
