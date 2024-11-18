@@ -33,6 +33,31 @@ Overview of tasks done in this notebook:
   o	Create boxplots to compare Maricopa county to the medians of other metrics for ppt
 •	Find the life expectancy outliers for counties > the median using dplyr
 
+### Annie_Anaylsis.Rmd - published by Annie Glenning 
+The data that is used in this R markdown comes from the cleaned county-level health data  joined with US Census AQI data "final_data.Rdata", called county_data in the notebook.
+
+The purpose of this markdown notebook is exploring county-level health and AQI data and discovering interesting relationship. 
+
+The conclusion of this markdown notebook was that there is statistically significant relationship between the Median AQI and income within the low income county group, between the Median AQI and adult obesity within the high income county group, between the Median AQI and low birth within the high income county group, and between the Median AQI and Violent Crimes rate in all counties. There is also a strong correlation between mental unhealthy days and physically unhealthy days. 
+
+Overview of tasks done in this markdown:
+• Read in libraries (ggplot, dplyr) in R
+• Created two new data frames one has all the counties under the median income and the other has the counties over the median income
+• Compared statistical numerical and visual summaries of the median AQI of the counties within each of the new data frames in R
+• Preformed many statistical test (Pearson's Correlation, Linear Regression) in R
+• Created scatterplots to learn relationships of median AQI and various health factors or violent crimes rate using ggplot2
+• Created a scatterplot to learn the relationship of physical unhealthy days and mental unhealthy days while in cateragized quartile groups according to median AQI for each county
+
+
+
+### SAL Project 1.Rmd - published by Annie Glenning 
+The purpose of this markdown notebook is downloading the cleaned county-level health data  and the US Census AQI data, and to join them to one data frame. 
+
+The conclusion of this markdown notebook is an inner join of the two dataframes called "final_data.Rdata". 
+
+Overview of tasks done in this markdown:
+• Read in libraries (dplyr, stringr) in R 
+• Cleaning the data to match for joinning in R
 
 
 
