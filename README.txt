@@ -3,6 +3,7 @@ README for SAL Project QBS 181 24F // Alexandra Treml, Anne Glenning, Sabin Hart
 ### MaricopaCase.Rmd - published by Alexandra Treml
 Key skills addressed in this notebook:
 •	Use an API for data collection
+•	Create a custom function that's used in analysis
 •	Use relational data (left joins)
 •	Overcome data errors with a leading 0
 •	Using the tidyverse package
