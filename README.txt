@@ -1,4 +1,4 @@
-README for SAL Project QBS 181 24F
+README for SAL Project QBS 181 24F // Alexandra Treml, Anne Glenning, Sabin Hart
 
 ### MaricopaCase.Rmd - published by Alexandra Treml
 Key skills addressed in this notebook:
