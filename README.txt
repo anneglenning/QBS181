@@ -1,6 +1,6 @@
 README for SAL Project QBS 181 24F
 
-## MaricopaCase.Rmd
+### MaricopaCase.Rmd - published by Alexandra Treml
 Key skills addressed in this notebook:
 •	Use an API for data collection
 •	Use relational data (left joins)
