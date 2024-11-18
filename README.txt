@@ -1,6 +1,15 @@
 README for SAL Project QBS 181 24F
 
 ## MaricopaCase.Rmd
+Key skills addressed in this notebook:
+•	Use an API for data collection
+•	Use relational data (left joins)
+•	Overcome data errors with a leading 0
+•	Using the tidyverse package
+•	Using plotly to create interactive visualizations
+•	Searching API data using grep and regex
+
+
 The data from this R markdown comes from the cleaned and aggregated county-level health data called ‘final_data.Rdata’ as well as from the US Census data API. 
 ## Purpose
 •	The purpose of this markdown notebook is to explore the county-level data to discover interesting patterns in the data to do further analysis on. 
