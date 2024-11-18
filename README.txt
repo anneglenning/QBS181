@@ -31,7 +31,7 @@ Overview of tasks done in this notebook:
 •	Use US Census API to grab population and job identifiers for Maricopa County, AZ. 
   o	Filter US census data by Maricopa County’s GEOID
   o	Filter the US census to GEOID 04013 and clean up, compare census data with health data
-  o	Create boxplots to compare Maricopa county to the medians of other metrics for ppt
+  o	Use a custom function and library to create boxplots to compare Maricopa county to the medians of other metrics for ppt
 •	Find the life expectancy outliers for counties > the median using dplyr
 
 ### Annie_Anaylsis.Rmd - published by Annie Glenning 
