@@ -17,8 +17,11 @@ library(plotly)
 ```{r}
 #DATA LOADING AND CLEANING
 
+#load custom function
+source("C:/Users/AlexandraTreml/Desktop/MS/QBS181/final_proj/QBS181/Scripts/custom_boxplot_func.R")
+
 #load data
-load("final_data.Rdata")
+load("C:/Users/AlexandraTreml/Desktop/MS/QBS181/final_proj/QBS181/Data/final_data.Rdata")
 df <- county_data
 df <- df %>%
   mutate(FIPS = sprintf("%05d", as.numeric(FIPS)))
@@ -59,18 +62,6 @@ ggplot(df, aes(x = rural_2020, y = adult_obesity_2020)) +
 spearman_obesity_rurality <- cor.test(df$adult_obesity_2020, df$rural_2020, method = "spearman")
 spearman_obesity_rurality 
 #results: p value is significant, so there is a moderately positive relationship between obesity and rurality
-```
-```{r}
-df$good_days <- as.numeric(df$good_days) #make sure good_days are numeric
-
-#scatterplot of obesity and rurality, colored by median aqi
-ggplot(df, aes(x = rural_2020, y = adult_obesity_2020)) +
-  geom_point(aes(color = median_aqi)) +
-  labs(title = "Adult Obesity vs. Rurality with Good Air Quality",
-       x = "Rurality",
-       y = "Adult Obesity %") +
-  scale_color_gradient(low = "red", high = "green")+
-  theme_minimal()
 ```
 
 ```{r}
@@ -201,52 +192,12 @@ pop_n_maricopa <- df %>%
 
 pop_n_maricopa
 
-#4412779	- 4410824	
+#4412779-4410824	
 
-# Boxplot for Adult Obesity
-ggplot(df, aes(y = adult_obesity_2020)) +
-  geom_boxplot(fill = "lightblue", color = "darkblue", outlier.color = "black", outlier.shape = 16, outlier.size = 2) +
-  labs(y = "Adult Obesity Rate") +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.text.y = element_text(size = 12),
-    axis.title.y = element_text(size = 14)
-  )
-
-# Boxplot for Limited Healthy Food
-ggplot(df, aes(y = limited_healthy_food_2020)) +
-  geom_boxplot(fill = "lightgreen", color = "darkgreen", outlier.color = "black", outlier.shape = 16, outlier.size = 2) +
-  labs(y = "% Population with Limited Healthy Food Access") +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.text.y = element_text(size = 12),
-    axis.title.y = element_text(size = 14)
-  )
-
-# Boxplot for Life Expectancy
-ggplot(df, aes(y = life_expectancy_2020)) +
-  geom_boxplot(fill = "lightcoral", color = "darkred", outlier.color = "black", outlier.shape = 16, outlier.size = 2) +
-  labs(y = "Life Expectancy (Years)") +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.text.y = element_text(size = 12),
-    axis.title.y = element_text(size = 14)
-  )
-#access to exercise
-ggplot(df, aes(y = access_to_exercise_2020)) +
-  geom_boxplot(fill = "purple", color = "darkblue", 
-               outlier.color = "black", outlier.shape = 16, 
-               outlier.size = 2) +
-  labs(y = "% Population with Access to Exercise") +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.text.y = element_text(size = 12),
-    axis.title.y = element_text(size = 14)
-  )
+custom_boxplot(df, "adult_obesity_2020", "lightblue", "Adult Obesity Rate")
+custom_boxplot(df, "limited_healthy_food_2020", "lightgreen", "% Population with Limited Healthy Food Access")
+custom_boxplot(df, "life_expectancy_2020", "lightcoral", "Life Expectancy (Years)")
+custom_boxplot(df, "access_to_exercise_2020", "purple", "% Population with Access to Exercise")
 ```
 ```{r}
 #LIFE EXPECTANCY OUTLIERS
