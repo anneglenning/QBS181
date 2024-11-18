@@ -9,7 +9,7 @@ Key skills addressed in this notebook:
 •	Using plotly to create interactive visualizations
 •	Searching API data using grep and regex
 
-
+## Data
 The data from this R markdown comes from the cleaned and aggregated county-level health data called ‘final_data.Rdata’ as well as from the US Census data API. 
 ## Purpose
 •	The purpose of this markdown notebook is to explore the county-level data to discover interesting patterns in the data to do further analysis on. 
