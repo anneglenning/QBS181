@@ -1,64 +1,69 @@
 README for SAL Project QBS 181 24F // Alexandra Treml, Anne Glenning, Sabin Hart
 
-### MaricopaCase.Rmd - published by Alexandra Treml
-Key skills addressed in this notebook:
-•	Use an API for data collection
-•	Create a custom function that's used in analysis
-•	Use relational data (left joins)
-•	Overcome data errors with a leading 0
-•	Using the tidyverse package
-•	Using plotly to create interactive visualizations
-•	Searching API data using grep and regex
-
-## Data
-The data from this R markdown comes from the cleaned and aggregated county-level health data called ‘final_data.Rdata’ as well as from the US Census data API. 
-## Purpose
-•	The purpose of this markdown notebook is to explore the county-level data to discover interesting patterns in the data to do further analysis on. 
-•	After exploring the data, the notebook covers an in-depth view of Maricopa County, AZ to determine if AQI in that region correlates to poor health outcomes 
-## Conclusion
-•	Maricopa County, AZ has above average health outcomes, likely due to excellent year-round sunshine, access to medical care, higher than average median incomes, access to exercise, access to great food. This is despite having some of the worst median air quality in the US due to winter inversion and ozone. 
-Overview of tasks done in this notebook: 
-•	Read in libraries (dplyr, tidyverse, ggplot2, sf, tigris, plotly, corrplot)
-•	Data Cleaning
-  o	make FIPS numeric
-  o	Summarize across all numeric variables by mean and group by State
-•	Exploratory scatterplots by rurality
-•	Create correlation matrix
-•	Use tigris and sf packages to load shapefile maps and create geopoints to plot county and state-level data by Median AQI on a map in R **using relational data**
-  o	Static county-level map in US regions using ggplot2
-  o	Dynamic county-level map, whole USA, using ggplot2 and plotly
-  o	Dynamic, aggregated state-level map USA, using ggplot and plotly
-•	Use US Census API to grab population and job identifiers for Maricopa County, AZ. 
-  o	Filter US census data by Maricopa County’s GEOID
-  o	Filter the US census to GEOID 04013 and clean up, compare census data with health data
-  o	Use a custom function and library to create boxplots to compare Maricopa county to the medians of other metrics for ppt
-•	Find the life expectancy outliers for counties > the median using dplyr
-
-### Annie_Anaylsis.Rmd - published by Annie Glenning 
-The data that is used in this R markdown comes from the cleaned county-level health data  joined with US Census AQI data "final_data.Rdata", called county_data in the notebook.
-
-The purpose of this markdown notebook is exploring county-level health and AQI data and discovering interesting relationship. 
-
-The conclusion of this markdown notebook was that there is statistically significant relationship between the Median AQI and income within the low income county group, between the Median AQI and adult obesity within the high income county group, between the Median AQI and low birth within the high income county group, and between the Median AQI and Violent Crimes rate in all counties. There is also a strong correlation between mental unhealthy days and physically unhealthy days. 
-
-Overview of tasks done in this markdown:
-• Read in libraries (ggplot, dplyr) in R
-• Created two new data frames one has all the counties under the median income and the other has the counties over the median income
-• Compared statistical numerical and visual summaries of the median AQI of the counties within each of the new data frames in R
-• Preformed many statistical test (Pearson's Correlation, Linear Regression) in R
-• Created scatterplots to learn relationships of median AQI and various health factors or violent crimes rate using ggplot2
-• Created a scatterplot to learn the relationship of physical unhealthy days and mental unhealthy days while in cateragized quartile groups according to median AQI for each county
 
 
+This document contains a high level overview of the structure of this repository as well as a one-sentence 
+description and I/O for each relevant document.
 
-### SAL Project 1.Rmd - published by Annie Glenning 
-The purpose of this markdown notebook is downloading the cleaned county-level health data  and the US Census AQI data, and to join them to one data frame. 
+For extensive descriptions of tasks completed and conclusions, see documentation.txt
+------------------------------------------------------------------------------------------------
 
-The conclusion of this markdown notebook is an inner join of the two dataframes called "final_data.Rdata". 
+STRUCTURE:
 
-Overview of tasks done in this markdown:
-• Read in libraries (dplyr, stringr) in R 
-• Cleaning the data to match for joinning in R
+There are three main folders in this document. Data contains all the data files, Dashboard contains all the 
+files relating to the creation of the dashboard, and Scripts contain all other scripts for 
+replicating this project.
+
+
+/Data:
+
+The original data files are 2020data.rdata and annual_aqi_by_county_2020.csv. 
+
+2020data.rdata is all sourced and available publicly, coming from a research project.
+
+annual_aqi_by_county_2020.csv is available at the following link: 
+https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual
+
+These data files are merged in SAL Project 1.Rmd and saved as final_data.Rdata, which is used for all 
+other analysis. The meta data explaining final_data.Rdata is in MetaData.xlsx.
+
+
+The last data file is map_data.rdata which contains the variable information from final_data merged 
+with state geographical boundaries from an API, created in MaricopaCase.Rmd. It is only used again by App.R
+to allow the dashboard easy access to the data.
+
+
+/Scripts
+
+The first script is SAL Project 1.Rmd. This file takes 2020data.rdata and annual_aqi_by_county_2020.csv 
+as input, merges and cleans them up, and saves them as final_data.Rdata.
+
+Next is SabinAnalysis.R. This file uses final_data and has no outputs. It analyzes the missing data value 
+and finds no issues for later analysis.
+
+Next is Annie_Analysis.Rmd. This loads in final_data and has no output. It analyzes the data based on 
+income and performs some correlation analysis and tests.
+
+Next are MaricopaCase.Rmd and custom_boxplot_function.R. custom boxplot is a library used by MaricopaCase.Rmd
+and simply implements a function with no file inputs or outputs. MaricopaCase takes final_data as input and 
+map_data as output. It analyzes the AQI data for regions of the US at a State and County level.
+
+
+/Dashboard
+
+Inside of Dashboard is App.R and a folder. The folder is autogenerated by rsconnect and controls the cloud app 
+deployment but does not need to be accessed. The App.R contains all functionality for the dashboard. It loads 
+in final and map data and outputs a local/cloud hosted dashboard.
+
+
+
+
+
+
+
+
+
+
 
 
 
