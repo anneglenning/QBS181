@@ -7,10 +7,10 @@ The conclusion of this markdown notebook is an inner join of the two dataframes 
 
 Overview of tasks done in this markdown:
 • Read in libraries (dplyr, stringr) in R 
-• Cleaning the data to match for joinning in R
+• Cleaning the data to match for joining in R
 
 
-### Annie_Anaylsis.Rmd - published by Annie Glenning 
+### Annie_Analysis.Rmd - published by Annie Glenning 
 The data that is used in this R markdown comes from the cleaned county-level health data  joined with US Census AQI data "final_data.Rdata", called county_data in the notebook.
 
 The purpose of this markdown notebook is exploring county-level health and AQI data and discovering interesting relationship. 
@@ -29,11 +29,26 @@ Overview of tasks done in this markdown:
 Key skills addressed in this notebook:
 •	Use an API for data collection
 •	Create a custom function that's used in analysis
+•	Create a custom library that's used in analysis
 •	Use relational data (left joins)
 •	Overcome data errors with a leading 0
 •	Using the tidyverse package
 •	Using plotly to create interactive visualizations
 •	Searching API data using grep and regex
+
+### SabinAnalysis.R - published by Sabin Hart
+Skills addressed in this script:
+•	Doing missing data analysis
+•	Visualizing missing data by row and column
+•	Analyzing population in missing data
+
+### App.R - published by Sabin Hart
+Skills addressed in this script:
+•	Create custom dashboard to display results
+•	Add user input to create multiple graphs
+•	Connect plotly with Shiny to allow interactive map
+•	Use Reconnect to cloud deploy the app
+
 
 ## Data
 The data from this R markdown comes from the cleaned and aggregated county-level health data called ‘final_data.Rdata’ as well as from the US Census data API. 
