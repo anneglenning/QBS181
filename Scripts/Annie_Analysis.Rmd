@@ -11,6 +11,12 @@ library(dplyr)
 ```
 
 ```{r}
+#load data
+load("C:/Users/annieglenning/Documents/GitHub/QBS181/Data/final_data.Rdata")
+df <- county_data
+```
+
+```{r}
 med_income <- median(county_data$income_2020) # median income
 low_income_df <- county_data %>%
   filter(income_2020 <= med_income) %>% # creating a df for counties less than or equal to median income
