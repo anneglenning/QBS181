@@ -9,7 +9,6 @@ Overview of tasks done in this markdown:
 • Read in libraries (dplyr, stringr) in R 
 • Cleaning the data to match for joining in R
 
-
 ### Annie_Analysis.Rmd - published by Annie Glenning 
 The data that is used in this R markdown comes from the cleaned county-level health data  joined with US Census AQI data "final_data.Rdata", called county_data in the notebook.
 
@@ -36,20 +35,6 @@ Key skills addressed in this notebook:
 •	Using plotly to create interactive visualizations
 •	Searching API data using grep and regex
 
-### SabinAnalysis.R - published by Sabin Hart
-Skills addressed in this script:
-•	Doing missing data analysis
-•	Visualizing missing data by row and column
-•	Analyzing population in missing data
-
-### App.R - published by Sabin Hart
-Skills addressed in this script:
-•	Create custom dashboard to display results
-•	Add user input to create multiple graphs
-•	Connect plotly with Shiny to allow interactive map
-•	Use Reconnect to cloud deploy the app
-
-
 ## Data
 The data from this R markdown comes from the cleaned and aggregated county-level health data called ‘final_data.Rdata’ as well as from the US Census data API. 
 ## Purpose
@@ -74,3 +59,15 @@ Overview of tasks done in this notebook:
   o	Use a custom function and library to create boxplots to compare Maricopa county to the medians of other metrics for ppt
 •	Find the life expectancy outliers for counties > the median using dplyr
 
+### SabinAnalysis.R - published by Sabin Hart
+Skills addressed in this script:
+•	Doing missing data analysis
+•	Visualizing missing data by row and column
+•	Analyzing population in missing data
+
+### App.R - published by Sabin Hart
+Skills addressed in this script:
+•	Create custom dashboard to display results
+•	Add user input to create multiple graphs
+•	Connect plotly with Shiny to allow interactive map
+•	Use Reconnect to cloud deploy the app
